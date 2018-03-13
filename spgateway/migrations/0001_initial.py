@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
+from django.conf import settings
 import django.db.models.deletion
 import spgateway.models
 
@@ -107,7 +108,7 @@ class Migration(migrations.Migration):
                 ('PayTime', models.DateTimeField(verbose_name='支付完成時間')),
                 ('IP', models.CharField(max_length=15, verbose_name='交易 IP')),
                 ('EscrowBank', models.CharField(max_length=10, verbose_name='履保銀行')),
-                ('Order', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='estore.Order', verbose_name='訂單')),
+                ('Order', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.SPGATEWAY_ORDERMODEL, verbose_name='訂單')),
             ],
             bases=(spgateway.models.SpgatewayResponseMixin, models.Model),
         ),
