@@ -17,7 +17,7 @@ class SpgatewayResponseMixin(object):
 
 
 class SpgatewayNotifyResponseInfo(SpgatewayResponseMixin, models.Model):
-    Order = models.ForeignKey(settings.SPGATEWAY_ORDERMODEL, verbose_name='訂單')
+    Order = models.ForeignKey(settings.SPGATEWAY_ORDERMODEL, verbose_name='訂單', on_delete=models.CASCADE)
     MerchantID = models.CharField(max_length=15, verbose_name='商店代號')
     Amt = models.IntegerField(max_length=10, verbose_name='交易金額')
     TradeNo = models.CharField(max_length=20, verbose_name='智付通交易序號')
