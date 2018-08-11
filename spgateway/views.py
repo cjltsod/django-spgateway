@@ -94,6 +94,9 @@ class SpgatewayReturnView(SpgatewayMixin, generic.View):
 
 
 class SpgatewayResonseViewMixin(SpgatewayMixin):
+    def get_base_model(self, trade_info=None):
+        raise ImproperlyConfigured('get_base_model not defined')
+
     def get_additional_model(self, trade_info=None):
         raise ImproperlyConfigured('get_addtional_model not defined')
 
@@ -102,9 +105,10 @@ class SpgatewayResonseViewMixin(SpgatewayMixin):
         self.trade_info = self.get_TradeInfo()
         self.object = self.get_order(slug=self.trade_info.get('Result', {}).get('MerchantOrderNo'))
 
+        base_model = self.get_base_model(self.trade_info)
         additional_model = self.get_additional_model(self.trade_info)
 
-        object = models.SpgatewayNotifyResponseInfo()
+        object = base_model()
         additional_object = additional_model(Info=object)
 
         trade_info_result = self.trade_info.get('Result', {})
@@ -131,6 +135,9 @@ class SpgatewayResonseViewMixin(SpgatewayMixin):
 
 
 class SpgatewayNotifyView(SpgatewayResonseViewMixin, generic.View):
+    def get_base_model(self, trade_info=None):
+        return models.SpgatewayNotifyResponseInfo
+
     def get_additional_model(self, trade_info=None):
         if trade_info is None:
             if self.trade_info:
@@ -158,6 +165,9 @@ class SpgatewayNotifyView(SpgatewayResonseViewMixin, generic.View):
 
 
 class SpgatewayCustomerView(SpgatewayResonseViewMixin, generic.View):
+    def get_base_model(self, trade_info=None):
+        return models.SpgatewayCustomerResponseInfo
+
     def get_additional_model(self, trade_info=None):
         if trade_info is None:
             if self.trade_info:
@@ -167,7 +177,7 @@ class SpgatewayCustomerView(SpgatewayResonseViewMixin, generic.View):
 
         payment_type = trade_info.get('Result', {}).get('PaymentType')
         if payment_type == 'VACC':
-            return models.SpgatewayCustomerResponseATM
+            return models.SpgatewayCustomerResponseVACC
         elif payment_type == 'CVS':
             return models.SpgatewayCustomerResponseCVS
         elif payment_type == 'BARCODE':

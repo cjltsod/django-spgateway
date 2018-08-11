@@ -17,9 +17,9 @@ class SpgatewayResponseMixin(object):
 
 
 class SpgatewayNotifyResponseInfo(SpgatewayResponseMixin, models.Model):
-    Order = models.ForeignKey(settings.SPGATEWAY_ORDERMODEL, verbose_name='訂單')
+    Order = models.ForeignKey(settings.SPGATEWAY_ORDERMODEL, verbose_name='訂單', on_delete=models.CASCADE)
     MerchantID = models.CharField(max_length=15, verbose_name='商店代號')
-    Amt = models.IntegerField(max_length=10, verbose_name='交易金額')
+    Amt = models.IntegerField(verbose_name='交易金額')
     TradeNo = models.CharField(max_length=20, verbose_name='智付通交易序號')
     MerchantOrderNo = models.CharField(max_length=20, verbose_name='商店訂單編號')
     PaymentType = models.CharField(max_length=10, verbose_name='支付方式')
@@ -35,12 +35,12 @@ class SpgatewayNotifyResponseCredit(models.Model):
     Auth = models.CharField(max_length=6, verbose_name='授權碼')
     Card6No = models.CharField(max_length=6, verbose_name='卡號前六碼')
     Card4No = models.CharField(max_length=4, verbose_name='卡號末四碼')
-    Inst = models.IntegerField(max_length=10, verbose_name='分期-期別')
-    InstFirst = models.IntegerField(max_length=10, verbose_name='分期-首期金額')
-    InstEach = models.IntegerField(max_length=10, verbose_name='分期-每期金額')
+    Inst = models.IntegerField(verbose_name='分期-期別')
+    InstFirst = models.IntegerField(verbose_name='分期-首期金額')
+    InstEach = models.IntegerField(verbose_name='分期-每期金額')
     ECI = models.CharField(max_length=2, verbose_name='ECI 值')
-    TokenUseStatus = models.IntegerField(max_length=1, verbose_name='信用卡快速結帳使用狀態')
-    RedAmt = models.IntegerField(max_length=5, null=True, verbose_name='紅利折抵後實際金額')
+    TokenUseStatus = models.IntegerField(verbose_name='信用卡快速結帳使用狀態')
+    RedAmt = models.IntegerField(null=True, verbose_name='紅利折抵後實際金額')
 
 
 class SpgatewayNotifyResponseATM(models.Model):
@@ -64,7 +64,7 @@ class SpgatewayNotifyResponseBarcode(models.Model):
 
 class SpgatewayCustomerResponseInfo(SpgatewayResponseMixin, models.Model):
     MerchantID = models.CharField(max_length=15, verbose_name='商店代號')
-    Amt = models.IntegerField(max_length=10, verbose_name='交易金額')
+    Amt = models.IntegerField(verbose_name='交易金額')
     TradeNo = models.CharField(max_length=20, verbose_name='智付通交易序號')
     MerchantOrderNo = models.CharField(max_length=20, verbose_name='商店訂單編號')
     PaymentType = models.CharField(max_length=10, verbose_name='支付方式')
@@ -124,6 +124,10 @@ class SpgatewayOrderMixin(models.Model):
 
     class Meta:
         abstract = True
+
+    def regenerate_slug(self):
+        self.SpgatewaySlug = generate_slug()
+        self.save()
 
     def save(self, **kwargs):
         if self.SpgatewaySlug in (None, ''):
