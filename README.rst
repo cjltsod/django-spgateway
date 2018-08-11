@@ -6,15 +6,15 @@ Write Django and your store as usual, and let ``django-spgateway`` handle your t
 
 Requirements
 ------------
-- Python 3.6
-- Django >= 1.10
-- pycrypto >=2.6.1
+- Python 3.7
+- Django 2.1
+- pycrypto 2.6.1
 - We only tested on environment as below
 
 Installation
 ------------
 
-1. Install using pip:
+1. Install using pip or pipenv:
 
    ``pip install django-spgageway``
 
@@ -26,7 +26,7 @@ Installation
 
 3. Add settings in your ``settings.py``:
 
-    .. code:: Django
+   .. code:: Python
 
     SPGATEWAY_PROFILE = {
         'YOUR_MerchantID': {
@@ -38,9 +38,12 @@ Installation
     SPGATEWAY_MERCHANTID = 'YOUR_MerchantID'
     SPGATEWAY_ORDERMODEL = 'yourapp.Order'
 
-4. Add urlpattern to in tour ``urls.py``:
 
-   ``url(r'^spgateway/', include('spgateway.urls')),``
+4. Add urlpattern into your ``urls.py``:
+
+   ``path('spgateway/', include('spgateway.urls')),`` for Django 2
+
+   ``url(r'^spgateway/', include('spgateway.urls')),`` for Django 1
 
 5. Import ``from spgateway.models import SpgatewayOrderMixin`` and inherit from it with your order model.
 
@@ -63,7 +66,7 @@ Installation
 Example model
 -------------
 
-   .. code:: Django
+   .. code:: Python
 
     from spgateway.models import SpgatewayOrderMixin
 
