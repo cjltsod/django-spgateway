@@ -125,6 +125,10 @@ class SpgatewayOrderMixin(models.Model):
     class Meta:
         abstract = True
 
+    def regenerate_slug(self):
+        self.SpgatewaySlug = generate_slug()
+        self.save()
+
     def save(self, **kwargs):
         if self.SpgatewaySlug in (None, ''):
             self.SpgatewaySlug = generate_slug()
