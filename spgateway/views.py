@@ -167,7 +167,7 @@ class SpgatewayCustomerView(SpgatewayResonseViewMixin, generic.View):
 
         payment_type = trade_info.get('Result', {}).get('PaymentType')
         if payment_type == 'VACC':
-            return models.SpgatewayCustomerResponseATM
+            return models.SpgatewayCustomerResponseVACC
         elif payment_type == 'CVS':
             return models.SpgatewayCustomerResponseCVS
         elif payment_type == 'BARCODE':
