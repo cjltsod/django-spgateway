@@ -200,7 +200,6 @@ class SpgatewayOrderMixin(models.Model):
         return None
 
     def get_SpgatewayNotifyURL(self, **kwargs):
-        print(kwargs)
         for each_profile in (kwargs, kwargs.get('MerchantProfile', dict())):
             if 'NotifyURL' in each_profile.keys():
                 return each_profile['NotifyURL']
@@ -214,7 +213,6 @@ class SpgatewayOrderMixin(models.Model):
         return reverse('spgateway_NotifyView')
 
     def get_SpgatewayReturnURL(self, **kwargs):
-        print(kwargs)
         for each_profile in (kwargs, kwargs.get('MerchantProfile', dict())):
             if 'ReturnURL' in each_profile.keys():
                 return each_profile['ReturnURL']
