@@ -2,6 +2,7 @@ from django.apps import apps
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponseRedirect, Http404
+from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
@@ -94,6 +95,8 @@ class SpgatewayReturnView(SpgatewayMixin, generic.View):
 
 
 class SpgatewayResonseViewMixin(SpgatewayMixin):
+    template_name = 'spgateway/response.html'
+
     def get_base_model(self, trade_info=None):
         raise ImproperlyConfigured('get_base_model not defined')
 
@@ -131,7 +134,13 @@ class SpgatewayResonseViewMixin(SpgatewayMixin):
         self.send_notify()
 
         success_url = self.get_success_url()
-        return HttpResponseRedirect(success_url)
+
+        if hasattr(self, 'template_name'):
+            result = render(self.request, self.template_name, {'success_url': success_url, 'TradeInfo': self.trade_info})
+        else:
+            result = HttpResponseRedirect(success_url)
+
+        return result
 
 
 class SpgatewayNotifyView(SpgatewayResonseViewMixin, generic.View):
