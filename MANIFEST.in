@@ -1,2 +1,2 @@
 include README.rst AUTHORS.rst LICENSE
-recursive-include spgateway *.py
+recursive-include spgateway *.py *.html
