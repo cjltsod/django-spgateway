@@ -62,6 +62,17 @@ Installation
         <input type="submit">
     </form>
 
+8. Add ``SpgatewaySameSiteCookieMiddleware`` before ``SessionMiddleware`` to avoid SameSite cookie while return from payment gateway:
+
+   .. code:: Python
+
+    MIDDLEWARE = [
+        'django.middleware.security.SecurityMiddleware',
+        'spgateway.middleware.SpgatewaySameSiteCookieMiddleware',
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.middleware.common.CommonMiddleware',
+        ...
+    ]
 
 Example model
 -------------
