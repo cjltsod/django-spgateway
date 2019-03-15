@@ -1,6 +1,6 @@
 from setuptools import setup
 
-__version__ = "0.3.3"
+__version__ = "0.3.4"
 
 with open('README.rst') as f:
     long_description = f.read()
@@ -20,11 +20,11 @@ setup(
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Programming Language :: Python",
-        "Programming Language :: Python :: Implementation :: PyPy",
-        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Framework :: Django",
-        "Framework :: Django :: 1.10",
+        "Framework :: Django :: 2.1",
+        "License :: OSI Approved :: MIT License",
         "Environment :: Web Environment",
     ],
     long_description=long_description,
