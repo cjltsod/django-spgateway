@@ -1,6 +1,7 @@
 import time
 
 from django.conf import settings
+from django.urls import reverse_lazy
 from django.utils.http import http_date
 
 SPGATEWAY_DEFAULT_SAMESITE_COOKIE_NAME = 'spgateway_sessionid'
@@ -13,7 +14,7 @@ def spgateway_session_key_plain_encrypt_decrypt_function(session_key):
 class SpgatewaySameSiteCookieMiddleware(object):
     def __init__(self, get_response):
         self.get_response = get_response
-        self.return_url_list = list()
+        self.return_url_set = set()
         self.encrypt_function = getattr(
             settings, 'SPGATEWAY_ANTISAMESITE_ENCRYPT_FUNCTION',
             spgateway_session_key_plain_encrypt_decrypt_function,
@@ -24,7 +25,12 @@ class SpgatewaySameSiteCookieMiddleware(object):
         )
 
         for shop_id, shop in settings.SPGATEWAY_PROFILE.items():
-            self.return_url_list.append(shop.get('ReturnURL'))
+            return_url = shop.get('ReturnURL')
+            if return_url:
+                self.return_url_set.add(return_url)
+
+        if not self.return_url_set:
+            self.return_url_set.add(reverse_lazy('spgateway_ReturnView'))
 
     def __call__(self, request):
 
