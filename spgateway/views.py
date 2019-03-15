@@ -94,9 +94,7 @@ class SpgatewayReturnView(SpgatewayMixin, generic.View):
             self.object.spgateway_return(self.request, self.trade_info)
 
 
-class SpgatewayResonseViewMixin(SpgatewayMixin):
-    template_name = 'spgateway/response.html'
-
+class SpgatewayResponseViewMixin(SpgatewayMixin):
     def get_base_model(self, trade_info=None):
         raise ImproperlyConfigured('get_base_model not defined')
 
@@ -143,7 +141,7 @@ class SpgatewayResonseViewMixin(SpgatewayMixin):
         return result
 
 
-class SpgatewayNotifyView(SpgatewayResonseViewMixin, generic.View):
+class SpgatewayNotifyView(SpgatewayResponseViewMixin, generic.View):
     def get_base_model(self, trade_info=None):
         return models.SpgatewayNotifyResponseInfo
 
@@ -173,7 +171,7 @@ class SpgatewayNotifyView(SpgatewayResonseViewMixin, generic.View):
             self.object.spgateway_notify(self.request, self.trade_info)
 
 
-class SpgatewayCustomerView(SpgatewayResonseViewMixin, generic.View):
+class SpgatewayCustomerView(SpgatewayResponseViewMixin, generic.View):
     def get_base_model(self, trade_info=None):
         return models.SpgatewayCustomerResponseInfo
 
