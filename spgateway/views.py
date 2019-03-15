@@ -71,6 +71,7 @@ class SpgatewayMixin(object):
 
 class SpgatewayReturnView(SpgatewayMixin, generic.View):
     model = None
+    template_name = 'spgateway/response.html'
 
     def __init__(self, *args, **kwargs):
         self.model = self.OrderModel
@@ -87,7 +88,16 @@ class SpgatewayReturnView(SpgatewayMixin, generic.View):
         self.send_notify()
 
         success_url = self.get_success_url()
-        return HttpResponseRedirect(success_url)
+
+        if hasattr(self, 'template_name'):
+            result = render(
+                self.request, self.template_name,
+                {'success_url': success_url, 'TradeInfo': self.trade_info},
+            )
+        else:
+            result = HttpResponseRedirect(success_url)
+
+        return result
 
     def send_notify(self):
         if hasattr(self.object, 'spgateway_return'):
@@ -142,6 +152,8 @@ class SpgatewayResponseViewMixin(SpgatewayMixin):
 
 
 class SpgatewayNotifyView(SpgatewayResponseViewMixin, generic.View):
+    template_name = 'spgateway/response.html'
+
     def get_base_model(self, trade_info=None):
         return models.SpgatewayNotifyResponseInfo
 
