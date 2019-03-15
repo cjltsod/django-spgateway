@@ -37,7 +37,7 @@ class SpgatewaySameSiteCookieMiddleware(object):
         response = self.get_response(request)
 
         if hasattr(settings, 'SESSION_COOKIE_SAMESITE') and settings.SESSION_COOKIE_SAMESITE:
-            if request.path in self.return_url_list:
+            if request.path in self.return_url_set:
                 antisamesite_session_cookie_name = getattr(
                     settings, 'SPGATEWAY_ANTISAMESITE_COOKIE_NAME',
                     SPGATEWAY_DEFAULT_SAMESITE_COOKIE_NAME,
